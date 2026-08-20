@@ -31,6 +31,7 @@ import LoginPage from './components/LoginPage';
 import PitchDeckModal from './components/PitchDeckModal';
 import GuidedTourModal from './components/GuidedTourModal';
 import LandingPage from './components/LandingPage';
+import StationPlatformModal from './components/StationPlatformModal';
 
 import './App.css';
 
@@ -52,6 +53,7 @@ export function App() {
   const [plans, setPlans] = useState([]);
   const [activePlanId, setActivePlanId] = useState('PLAN_D');
   const [selectedTrainId, setSelectedTrainId] = useState(null);
+  const [selectedStation, setSelectedStation] = useState(null);
   const [cabViewTrainId, setCabViewTrainId] = useState(null);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isReportOpen, setIsReportOpen] = useState(false);
@@ -380,6 +382,7 @@ export function App() {
                 conflicts={conflicts}
                 selectedTrainId={selectedTrainId}
                 onSelectTrain={setSelectedTrainId}
+                onSelectStation={(stn) => setSelectedStation(stn)}
                 onToggleSwitch={handleToggleSwitch}
                 timeHours={timeHours}
                 setTimeHours={setTimeHours}
@@ -455,6 +458,15 @@ export function App() {
           onUpdateSpeed={handleUpdateTrainSpeed}
         />
       )}
+
+      {/* Station Master Platform Berth & Relay Interlocking Modal */}
+      <StationPlatformModal
+        station={selectedStation}
+        trains={trains}
+        isOpen={!!selectedStation}
+        onClose={() => setSelectedStation(null)}
+        onSelectTrain={setSelectedTrainId}
+      />
 
       {/* Controller CRIS / TMS Auth Modal */}
       <AuthLoginModal

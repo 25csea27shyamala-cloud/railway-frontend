@@ -3307,6 +3307,240 @@ body {
 .metric-box .lbl { font-size: 8px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
 .metric-box .val { font-size: 10px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
 
+/* ========================================================================= */
+/* STATION MASTER PLATFORM BERTH & TRACK RELAY MODAL */
+/* ========================================================================= */
+.station-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 85;
+  padding: 20px;
+}
+
+.station-modal-container {
+  background: #090e1c;
+  border: 1px solid var(--border-bright);
+  border-radius: 20px;
+  max-width: 820px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.95), 0 0 40px rgba(56, 189, 248, 0.2);
+  animation: fadeInZoom 0.2s ease-out;
+}
+
+.station-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border-color);
+  background: #070b16;
+  border-radius: 20px 20px 0 0;
+}
+
+.station-icon-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.station-modal-title {
+  font-size: 16px;
+  font-weight: 900;
+  font-family: 'JetBrains Mono', monospace;
+  color: #ffffff;
+}
+
+.station-km-tag {
+  font-size: 9.5px;
+  font-family: 'JetBrains Mono', monospace;
+  background: #142144;
+  color: var(--accent-blue);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.station-sub-desc {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.btn-station-close {
+  background: #18233d;
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  border-radius: 6px;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.station-metrics-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 12px 24px;
+  background: #070a14;
+  border-bottom: 1px solid var(--border-color);
+}
+@media (max-width: 700px) { .station-metrics-row { grid-template-columns: repeat(2, 1fr); } }
+
+.station-stat-pill {
+  display: flex;
+  flex-direction: column;
+  font-size: 9.5px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.station-stat-pill .lbl { color: var(--text-muted); font-size: 8.5px; }
+.station-stat-pill .val { font-weight: 800; margin-top: 2px; }
+
+.platforms-berth-list {
+  padding: 18px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+.platform-card {
+  background: #0b1124;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.platform-card.occupied { border-left: 4px solid var(--accent-red); background: #0f1429; }
+.platform-card.clear { border-left: 4px solid var(--accent-green); }
+
+.platform-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.platform-num-badge {
+  font-size: 11px;
+  font-weight: 900;
+  font-family: 'JetBrains Mono', monospace;
+  background: #142144;
+  color: #ffffff;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border-bright);
+}
+
+.platform-track-lbl {
+  font-size: 9.5px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-muted);
+}
+
+.platform-status-tag {
+  font-size: 9px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.platform-status-tag.occupied { background: #450a0a; color: #fca5a5; }
+.platform-status-tag.clear { background: #052e16; color: var(--accent-green); }
+
+.platform-train-details {
+  background: #080d1a;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.train-dot-color { width: 8px; height: 8px; border-radius: 50%; }
+.train-id-txt { font-size: 11px; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: #ffffff; display: block; }
+.train-route-txt { font-size: 9px; color: var(--text-muted); }
+
+.priority-tag {
+  background: #451a03;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: #facc15;
+  font-size: 9px;
+  font-weight: 800;
+  font-family: 'JetBrains Mono', monospace;
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+
+.platform-dwell-bar {
+  display: flex;
+  justify-content: space-between;
+  background: #060913;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 9.5px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.dwell-stat { display: flex; align-items: center; gap: 4px; color: var(--text-muted); }
+
+.platform-btn-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.btn-plt-action {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  background: #142144;
+  border: 1px solid var(--border-color);
+  color: #ffffff;
+  border-radius: 6px;
+  font-size: 9.5px;
+  font-family: 'JetBrains Mono', monospace;
+  cursor: pointer;
+}
+.btn-plt-action:hover { background: #1c2e5c; }
+.btn-plt-action.primary { background: #0284c7; border-color: #0284c7; color: #ffffff; font-weight: 800; }
+.btn-plt-action.secondary { background: #052e16; border-color: rgba(16, 185, 129, 0.4); color: var(--accent-green); font-weight: 800; }
+
+.platform-clear-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #080d1a;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+.clear-desc { font-size: 10px; color: #94a3b8; font-family: 'JetBrains Mono', monospace; }
+
+.station-modal-footer {
+  padding: 10px 24px;
+  border-top: 1px solid var(--border-color);
+  background: #070b16;
+  font-size: 9px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-muted);
+  text-align: center;
+  border-radius: 0 0 20px 20px;
+}
+
 /* Modals & Subpages */
 .drawbacks-container, .architecture-container, .roi-container, .tsv-chart-container {
   background: #0b1224;

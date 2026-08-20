@@ -11,6 +11,7 @@ export const RailwayMap = ({
   conflicts,
   selectedTrainId,
   onSelectTrain,
+  onSelectStation,
   onToggleSwitch,
   timeHours,
   weather,
@@ -457,18 +458,26 @@ export const RailwayMap = ({
             );
           })}
 
-          {/* Stations */}
+          {/* Stations (Clickable Station Platform Berth Inspector) */}
           {stations.map((stn) => {
             const x = kmToX(stn.km);
             return (
-              <g key={stn.id} transform={`translate(${x}, 0)`}>
+              <g
+                key={stn.id}
+                transform={`translate(${x}, 0)`}
+                className="cursor-pointer group"
+                onClick={() => {
+                  soundEngine.playRelayClick();
+                  if (onSelectStation) onSelectStation(stn);
+                }}
+              >
                 <line x1={0} y1={40} x2={0} y2={Y_BRANCH_END + 15} stroke="#1e2947" strokeWidth={1.2} strokeDasharray="3,3" />
-                <rect x={-70} y={26} width={140} height={26} rx={6} fill="#0f172a" stroke="#38bdf8" strokeWidth={1.5} className="shadow-xl" />
+                <rect x={-70} y={26} width={140} height={26} rx={6} fill="#0f172a" stroke="#38bdf8" strokeWidth={1.5} className="shadow-xl transition-all group-hover:stroke-amber-400 group-hover:fill-slate-900" />
                 <text x={0} y={40} fill="#ffffff" fontSize={10} fontWeight="900" fontFamily="monospace" textAnchor="middle">
                   {stn.name.toUpperCase()}
                 </text>
                 <text x={0} y={49} fill="#38bdf8" fontSize={7.5} fontFamily="monospace" textAnchor="middle">
-                  [{stn.code}] • Km {stn.km.toFixed(1)}
+                  [{stn.code}] • Km {stn.km.toFixed(1)} 🔍
                 </text>
               </g>
             );
