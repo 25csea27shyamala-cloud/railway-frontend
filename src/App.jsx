@@ -347,7 +347,9 @@ export function App() {
                 onSelectTrain={setSelectedTrainId}
                 onToggleSwitch={handleToggleSwitch}
                 timeHours={timeHours}
+                setTimeHours={setTimeHours}
                 weather={weather}
+                setWeather={setWeather}
                 onApplyAIRecommendation={() => {
                   const recPlan = plans.find((p) => p.isRecommended) || plans[0];
                   if (recPlan) handleDeployPlan(recPlan);

@@ -1,79 +1,47 @@
 import React, { useState } from 'react';
-import { Shield, Lock, User, KeyRound, Sparkles, CheckCircle2, ArrowRight, Eye, EyeOff, Radio, Train, Cpu, ShieldCheck, Zap, Globe, AlertCircle } from 'lucide-react';
+import { Lock, Mail, ArrowRight, Eye, EyeOff, Sparkles, Shield, Check, Globe, Zap, Cpu, Train, Building2, UserCheck } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { soundEngine } from '../engine/soundEngine';
 
 export const LoginPage = ({ onLoginSuccess }) => {
-  const [role, setRole] = useState('CHIEF_CONTROLLER');
-  const [username, setUsername] = useState('controller.pryj@railnet.gov.in');
+  const [email, setEmail] = useState('controller@railmind.ai');
   const [password, setPassword] = useState('RailMind#2026');
   const [showPassword, setShowPassword] = useState(false);
-  const [otp, setOtp] = useState('849201');
-  const [useOtp, setUseOtp] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [activeTab, setActiveTab] = useState('EMAIL'); // 'EMAIL' or 'SSO'
 
-  const roles = [
+  const demoAccounts = [
     {
-      id: 'CHIEF_CONTROLLER',
-      title: 'Chief Section Controller',
-      icon: '👑',
-      badge: 'Full Interlock Authority',
-      desc: 'Controls mainline routes, dynamic speeds & conflict resolution',
-      defaultEmail: 'controller.pryj@railnet.gov.in',
+      role: 'Chief Section Controller',
+      email: 'controller@railmind.ai',
       name: 'Shri R. K. Sharma',
-      zone: 'North Central Railway (NCR)',
-      division: 'Prayagraj Control Office (PRYJ)',
+      badge: 'Admin Access',
+      color: '#38bdf8',
     },
     {
-      id: 'STATION_MASTER',
-      title: 'Station Master / Yard Master',
-      icon: '🏢',
-      badge: 'Platform Interlocking',
-      desc: 'Manages station platform dwells, loops & siding crossovers',
-      defaultEmail: 'sm.naini@railnet.gov.in',
-      name: 'A. K. Verma',
-      zone: 'North Central Railway (NCR)',
-      division: 'Naini Diamond Junction',
+      role: 'SIH Evaluator / Jury',
+      email: 'evaluator@sih2026.gov.in',
+      name: 'Evaluation Jury',
+      badge: 'Full Mission Control',
+      color: '#facc15',
     },
     {
-      id: 'LOCO_PILOT',
-      title: 'Loco Pilot (Driver HUD)',
-      icon: '🚂',
-      badge: 'Kavach In-Cab Telemetry',
-      desc: 'Accesses real-time target distance braking curve & throttle',
-      defaultEmail: 'locopilot.vande@railnet.gov.in',
-      name: 'S. K. Yadav (LP / PRYJ)',
-      zone: 'Northern Railway',
-      division: 'High-Speed Express Division',
-    },
-    {
-      id: 'SIH_JUDGE',
-      title: 'SIH Evaluator / Jury',
-      icon: '⭐',
-      badge: 'Evaluation Mission Control',
-      desc: 'Instant full-access inspection of all 6 layers & ROI models',
-      defaultEmail: 'evaluator.sih2026@gov.in',
-      name: 'Honorable Evaluation Jury',
-      zone: 'Ministry of Railways (MoR)',
-      division: 'Smart India Hackathon 2026',
+      role: 'Loco Pilot (Driver)',
+      email: 'locopilot@railmind.ai',
+      name: 'S. K. Yadav',
+      badge: 'In-Cab HUD',
+      color: '#10b981',
     },
   ];
 
-  const handleRoleChange = (selectedRole) => {
-    soundEngine.playRelayClick();
-    setRole(selectedRole.id);
-    setUsername(selectedRole.defaultEmail);
-    setPassword('RailMind#2026');
-    setError('');
-  };
-
-  const handleFormSubmit = (e) => {
+  const handleLogin = (e) => {
     e?.preventDefault();
     setError('');
 
-    if (!username.trim() || !password.trim()) {
-      setError('Please enter your official Railnet ID and security password.');
+    if (!email.trim() || !password.trim()) {
+      setError('Please provide a valid email and password.');
       return;
     }
 
@@ -83,36 +51,40 @@ export const LoginPage = ({ onLoginSuccess }) => {
     setTimeout(() => {
       setIsLoading(false);
       soundEngine.playSuccessTone();
-
-      const currentRoleObj = roles.find((r) => r.id === role) || roles[0];
-      soundEngine.speakDispatch(`Access granted. Welcome, ${currentRoleObj.title}. Initializing Digital Twin.`);
+      soundEngine.speakDispatch('Authentication verified. Welcome to RAILMIND Command Center.');
 
       confetti({
-        particleCount: 80,
-        spread: 70,
+        particleCount: 90,
+        spread: 75,
         origin: { y: 0.6 },
         colors: ['#38bdf8', '#10b981', '#f59e0b', '#a855f7'],
       });
 
+      const matchedDemo = demoAccounts.find((d) => d.email === email) || demoAccounts[0];
+
       onLoginSuccess({
         id: 'OP_' + Math.floor(1000 + Math.random() * 9000),
-        name: currentRoleObj.name,
-        role: currentRoleObj.id,
-        roleLabel: currentRoleObj.title,
-        zone: currentRoleObj.zone,
-        division: currentRoleObj.division,
-        email: username,
+        name: matchedDemo.name || 'Section Controller',
+        role: 'CHIEF_CONTROLLER',
+        roleLabel: matchedDemo.role || 'Chief Section Controller',
+        zone: 'North Central Railway (NCR)',
+        division: 'Prayagraj Control Division (PRYJ)',
+        email: email,
         loginTime: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
-        securityClearance: 'LEVEL-4 CRIS CERTIFIED',
+        securityClearance: 'LEVEL-4 ENTERPRISE AUTH',
       });
-    }, 700);
+    }, 600);
   };
 
-  const handleInstantJudgeLogin = () => {
-    const judgeRole = roles.find((r) => r.id === 'SIH_JUDGE');
-    handleRoleChange(judgeRole);
-    soundEngine.playSuccessTone();
+  const handleQuickFill = (account) => {
+    soundEngine.playRelayClick();
+    setEmail(account.email);
+    setPassword('RailMind#2026');
+    setError('');
+  };
 
+  const handle1ClickJudgeLogin = () => {
+    soundEngine.playSuccessTone();
     confetti({
       particleCount: 100,
       spread: 80,
@@ -127,201 +99,232 @@ export const LoginPage = ({ onLoginSuccess }) => {
       roleLabel: 'SIH Technical Evaluator',
       zone: 'Ministry of Railways (MoR)',
       division: 'National Grand Finale Mission Control',
-      email: 'evaluator.sih2026@gov.in',
+      email: 'evaluator@sih2026.gov.in',
       loginTime: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
       securityClearance: 'CHIEF EVALUATION ACCESS',
     });
   };
 
   return (
-    <div className="login-portal-root">
-      {/* Background Animated Railway Glowing Network */}
-      <div className="portal-bg-canvas">
-        <div className="bg-gradient-orb top-left" />
-        <div className="bg-gradient-orb bottom-right" />
-        <div className="portal-rail-lines">
-          <div className="portal-line line-1" />
-          <div className="portal-line line-2" />
-          <div className="portal-line line-3" />
-        </div>
+    <div className="startup-login-root">
+      {/* Dynamic Background Glow Rings & Particle Grid */}
+      <div className="startup-bg-mesh">
+        <div className="ambient-glow glow-1" />
+        <div className="ambient-glow glow-2" />
+        <div className="ambient-grid-lines" />
       </div>
 
-      {/* Main Login Card Container */}
-      <div className="login-master-card shadow-2xl">
-        {/* Top Official Header */}
-        <div className="portal-card-header">
-          <div className="brand-badge-row">
-            <div className="emblem-box">
-              <Train className="w-6 h-6 text-sky-300" />
+      {/* Main SaaS Card Container */}
+      <div className="startup-card-wrapper shadow-2xl">
+        {/* Brand Header */}
+        <div className="startup-brand-header">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="startup-logo-icon">
+                <Train className="w-6 h-6 text-sky-400" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="startup-logo-text">RAILMIND</span>
+                  <span className="startup-version-tag">v2.4 Enterprise</span>
+                </div>
+                <p className="startup-subtext">AI-Powered Autonomous Railway Traffic Operating System</p>
+              </div>
             </div>
-            <div className="brand-text-col">
-              <span className="gov-title">GOVERNMENT OF INDIA • MINISTRY OF RAILWAYS</span>
-              <h1 className="system-title">RAILMIND AI COMMAND CENTER</h1>
-              <span className="sih-tag">SIH25022 • REAL-TIME DIGITAL TWIN & MINIMUM-REGRET DECISION PORTAL</span>
-            </div>
-          </div>
 
-          {/* 1-Click Instant Evaluator Demo Button */}
-          <button
-            type="button"
-            onClick={handleInstantJudgeLogin}
-            className="btn-instant-judge"
-            title="Instant 1-Click Access for Evaluation Judges"
-          >
-            <Sparkles className="w-4 h-4 text-amber-300 animate-spin-slow" />
-            <span>⚡ 1-Click Evaluator Auto-Login</span>
-          </button>
+            {/* 1-Click Judge Button */}
+            <button
+              type="button"
+              onClick={handle1ClickJudgeLogin}
+              className="startup-btn-jury"
+              title="1-Click Instant Evaluation Demo"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-spin-slow" />
+              <span>⚡ 1-Click Evaluator Demo</span>
+            </button>
+          </div>
         </div>
 
-        {/* Card Body */}
-        <div className="portal-card-body">
-          {/* Left Column: Role Selector Grid */}
-          <div className="role-selector-column">
-            <div className="column-title-row">
-              <ShieldCheck className="w-4 h-4 text-sky-400" />
-              <span>SELECT OPERATIONAL DESK / ROLE:</span>
+        {/* Content Body Grid */}
+        <div className="startup-card-content">
+          {/* Left Column: Form */}
+          <div className="startup-form-side">
+            <div className="form-intro">
+              <h2 className="signin-heading">Welcome back</h2>
+              <p className="signin-sub">Sign in to your section control workspace</p>
             </div>
 
-            <div className="roles-grid">
-              {roles.map((r) => {
-                const isSelected = role === r.id;
-                return (
-                  <div
-                    key={r.id}
-                    onClick={() => handleRoleChange(r)}
-                    className={`role-option-card ${isSelected ? 'selected' : ''}`}
+            {/* Quick Demo Switcher Chips */}
+            <div className="quick-demo-accounts-box">
+              <span className="box-lbl">Quick Demo Profiles:</span>
+              <div className="demo-pills-row">
+                {demoAccounts.map((d) => (
+                  <button
+                    key={d.email}
+                    type="button"
+                    onClick={() => handleQuickFill(d)}
+                    className={`demo-pill-btn ${email === d.email ? 'active' : ''}`}
                   >
-                    <div className="role-card-top">
-                      <span className="role-icon">{r.icon}</span>
-                      <span className="role-badge-tag">{r.badge}</span>
-                    </div>
-                    <h3 className="role-name">{r.title}</h3>
-                    <p className="role-desc">{r.desc}</p>
-                    <div className="role-footer-user">
-                      <span>{r.name}</span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Live Security Feature Tags */}
-            <div className="security-badges-row">
-              <div className="sec-tag"><Shield className="w-3 h-3 text-emerald-400" /><span>256-Bit CRIS Encryption</span></div>
-              <div className="sec-tag"><Cpu className="w-3 h-3 text-sky-400" /><span>Kavach 2.0 ATP Paired</span></div>
-              <div className="sec-tag"><Globe className="w-3 h-3 text-purple-400" /><span>COA / TMS Synchronized</span></div>
-            </div>
-          </div>
-
-          {/* Right Column: Authentication Form */}
-          <div className="auth-form-column">
-            <div className="form-column-header">
-              <Lock className="w-4 h-4 text-emerald-400" />
-              <span className="font-bold">CRIS SECTION CONTROLLER LOGIN</span>
+                    <span className="pill-dot" style={{ backgroundColor: d.color }} />
+                    <span>{d.role}</span>
+                  </button>
+                ))}
+              </div>
             </div>
 
             {error && (
-              <div className="auth-alert-box">
-                <AlertCircle className="w-4 h-4 text-rose-400 flex-shrink-0" />
+              <div className="startup-error-banner">
                 <span>{error}</span>
               </div>
             )}
 
-            <form onSubmit={handleFormSubmit} className="portal-login-form">
-              {/* Railnet Official ID */}
-              <div className="portal-input-group">
-                <label>OFFICIAL RAILNET ID / USERNAME:</label>
-                <div className="input-box-wrapper">
-                  <User className="input-icon-left" />
+            {/* Login Form */}
+            <form onSubmit={handleLogin} className="startup-actual-form">
+              <div className="input-group-modern">
+                <label>Email address / Railnet ID</label>
+                <div className="input-container-modern">
+                  <Mail className="input-ico" />
                   <input
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder="controller@railnet.gov.in"
-                    className="portal-input"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="controller@railmind.ai"
+                    className="modern-text-input"
                     required
                   />
                 </div>
               </div>
 
-              {/* Security Password */}
-              <div className="portal-input-group">
-                <label>SECURITY PASSCODE / CRIS TOKEN:</label>
-                <div className="input-box-wrapper">
-                  <KeyRound className="input-icon-left" />
+              <div className="input-group-modern">
+                <div className="flex justify-between items-center">
+                  <label>Password</label>
+                  <a href="#forgot" onClick={(e) => { e.preventDefault(); alert('For SIH Demo: Use default password RailMind#2026 or click 1-Click Evaluator Demo.'); }} className="forgot-link">
+                    Forgot password?
+                  </a>
+                </div>
+                <div className="input-container-modern">
+                  <Lock className="input-ico" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Enter password"
-                    className="portal-input"
+                    placeholder="••••••••••••"
+                    className="modern-text-input"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="btn-toggle-eye"
+                    className="toggle-eye-btn"
                   >
-                    {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
 
-              {/* 2FA Security Token Toggle */}
-              <div className="two-factor-row">
-                <label className="toggle-label" onClick={() => setUseOtp(!useOtp)}>
+              <div className="flex justify-between items-center text-xs text-slate-400">
+                <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={useOtp}
-                    onChange={(e) => setUseOtp(e.target.checked)}
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    className="rounded border-slate-700 bg-slate-900 text-sky-500"
                   />
-                  <span>Verify with 2FA Station Interlock Token (OTP)</span>
+                  <span>Remember this device for 30 days</span>
                 </label>
-
-                {useOtp && (
-                  <div className="otp-input-row">
-                    <input
-                      type="text"
-                      value={otp}
-                      onChange={(e) => setOtp(e.target.value)}
-                      placeholder="6-Digit OTP"
-                      maxLength={6}
-                      className="portal-input otp"
-                    />
-                    <span className="otp-countdown">⏱️ Auto-Generated</span>
-                  </div>
-                )}
+                <span className="text-emerald-400 flex items-center gap-1 font-mono text-[11px]">
+                  <Shield className="w-3 h-3" /> 2FA Active
+                </span>
               </div>
 
-              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={isLoading}
-                className="btn-portal-submit"
+                className="startup-btn-submit"
               >
                 {isLoading ? (
                   <>
-                    <span className="spinner-orbit animate-spin" />
-                    <span>Verifying CRIS Interlocking Credentials...</span>
+                    <span className="spinner-dot animate-spin" />
+                    <span>Signing in...</span>
                   </>
                 ) : (
                   <>
-                    <span>AUTHORIZE & LAUNCH COMMAND CENTER</span>
+                    <span>Sign in to Command Center</span>
                     <ArrowRight className="w-4 h-4" />
                   </>
                 )}
               </button>
             </form>
 
-            <div className="form-footer-note">
-              <span>Section 4: Prayagraj Division (NCR) • Interlocked with Northern & North Eastern Railway Grids</span>
+            <div className="sso-divider">
+              <span className="divider-line" />
+              <span className="divider-text">OR CONTINUE WITH ENTERPRISE SSO</span>
+              <span className="divider-line" />
+            </div>
+
+            <div className="social-sso-grid">
+              <button
+                type="button"
+                onClick={handle1ClickJudgeLogin}
+                className="btn-sso"
+              >
+                <Building2 className="w-4 h-4 text-sky-400" />
+                <span>Ministry Railnet SSO</span>
+              </button>
+              <button
+                type="button"
+                onClick={handle1ClickJudgeLogin}
+                className="btn-sso"
+              >
+                <UserCheck className="w-4 h-4 text-emerald-400" />
+                <span>CRIS Identity Gateway</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Right Column: Value Prop & Live Product Stats */}
+          <div className="startup-showcase-side">
+            <div className="showcase-badge">
+              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+              <span>SIH25022 • Ministry of Railways Problem Statement</span>
+            </div>
+
+            <h3 className="showcase-title">
+              Maximizing Section Line Capacity with Real-Time Digital Twin
+            </h3>
+
+            <p className="showcase-desc">
+              Experience dynamic green-wave speed harmonization, minimum-regret What-If optimization, and in-cab Kavach ATP synchronization.
+            </p>
+
+            <div className="showcase-stats-list">
+              <div className="showcase-stat-item">
+                <div className="stat-num text-sky-400">+28%</div>
+                <div className="stat-label">Scott's Line Capacity (E: 0.91)</div>
+              </div>
+              <div className="showcase-stat-item">
+                <div className="stat-num text-emerald-400">-68%</div>
+                <div className="stat-label">Section Delay Compression</div>
+              </div>
+              <div className="showcase-stat-item">
+                <div className="stat-num text-amber-400">0 Deadlocks</div>
+                <div className="stat-label">Junction Conflict Elimination</div>
+              </div>
+            </div>
+
+            <div className="showcase-footer-card">
+              <div className="flex items-center gap-2">
+                <div className="pulse-dot green" />
+                <span className="text-xs font-mono font-bold text-white">Prayagraj Division (NCR) Live Node</span>
+              </div>
+              <span className="text-[10px] text-slate-400 font-mono mt-1 block">35.0 km Quad-Track Electrified Master Corridor</span>
             </div>
           </div>
         </div>
 
-        {/* Card Footer */}
-        <div className="portal-card-footer">
-          <span>MINISTRY OF RAILWAYS • CENTRE FOR RAILWAY INFORMATION SYSTEMS (CRIS) • SMART INDIA HACKATHON 2026</span>
+        {/* Footer */}
+        <div className="startup-card-footer">
+          <span>Protected by 256-Bit SSL Encryption • Built for Smart India Hackathon (SIH25022)</span>
         </div>
       </div>
     </div>
