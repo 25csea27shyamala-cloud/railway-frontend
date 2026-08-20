@@ -53,7 +53,7 @@ export function App() {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isReportOpen, setIsReportOpen] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(true); // default true or toggleable
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // Shows official Login Portal upon entry
 
   // Authenticated Operator State
   const [currentUser, setCurrentUser] = useState({
