@@ -20,6 +20,7 @@ export const Header = ({
   onOpenTour,
   onOpenLanding,
   onOpenVoice,
+  onOpenCCTV,
   onLogout,
   conflictsCount = 0,
 }) => {
@@ -60,6 +61,19 @@ export const Header = ({
           >
             <span className="pulse-mic-dot" />
             <span>🎙️ AI Voice</span>
+          </button>
+
+          {/* CCTV & Drone Surveillance Trigger */}
+          <button
+            onClick={() => {
+              soundEngine.playRelayClick();
+              if (onOpenCCTV) onOpenCCTV();
+            }}
+            className="btn-cctv-header"
+            title="Open AI Vision & CCTV Corridor Surveillance Matrix"
+          >
+            <span className="pulse-cctv-dot" />
+            <span>📹 Live CCTV</span>
           </button>
 
           {/* Product Landing Page Switcher */}

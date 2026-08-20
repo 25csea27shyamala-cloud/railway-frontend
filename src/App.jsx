@@ -34,6 +34,7 @@ import LandingPage from './components/LandingPage';
 import StationPlatformModal from './components/StationPlatformModal';
 import VoiceControlModal from './components/VoiceControlModal';
 import TrainInspectorModal from './components/TrainInspectorModal';
+import CCTVMonitoringModal from './components/CCTVMonitoringModal';
 
 import './App.css';
 
@@ -62,6 +63,7 @@ export function App() {
   const [isPitchDeckOpen, setIsPitchDeckOpen] = useState(false);
   const [isTourOpen, setIsTourOpen] = useState(false);
   const [isVoiceOpen, setIsVoiceOpen] = useState(false);
+  const [isCCTVOpen, setIsCCTVOpen] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [viewMode, setViewMode] = useState('COMMAND_CENTER'); // 'COMMAND_CENTER', 'LANDING', 'LOGIN'
   const [isAuthenticated, setIsAuthenticated] = useState(true);
@@ -344,6 +346,7 @@ export function App() {
         onOpenTour={() => setIsTourOpen(true)}
         onOpenLanding={() => setViewMode('LANDING')}
         onOpenVoice={() => setIsVoiceOpen(true)}
+        onOpenCCTV={() => setIsCCTVOpen(true)}
         onLogout={() => {
           setIsAuthenticated(false);
           setViewMode('LOGIN');
@@ -534,6 +537,12 @@ export function App() {
         onSetWeather={setWeather}
         onSelectTrain={setSelectedTrainId}
         trains={trains}
+      />
+
+      {/* AI Vision & CCTV Surveillance Modal */}
+      <CCTVMonitoringModal
+        isOpen={isCCTVOpen}
+        onClose={() => setIsCCTVOpen(false)}
       />
 
       {/* Footer */}
