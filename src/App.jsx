@@ -28,6 +28,8 @@ import CabViewModal from './components/CabViewModal';
 import AuthLoginModal from './components/AuthLoginModal';
 import ExportReportModal from './components/ExportReportModal';
 import LoginPage from './components/LoginPage';
+import PitchDeckModal from './components/PitchDeckModal';
+import GuidedTourModal from './components/GuidedTourModal';
 
 import './App.css';
 
@@ -52,6 +54,8 @@ export function App() {
   const [cabViewTrainId, setCabViewTrainId] = useState(null);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isReportOpen, setIsReportOpen] = useState(false);
+  const [isPitchDeckOpen, setIsPitchDeckOpen] = useState(false);
+  const [isTourOpen, setIsTourOpen] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Shows official Login Portal upon entry
 
@@ -305,6 +309,8 @@ export function App() {
         currentUser={currentUser}
         onOpenLogin={() => setIsAuthOpen(true)}
         onOpenReport={() => setIsReportOpen(true)}
+        onOpenPitchDeck={() => setIsPitchDeckOpen(true)}
+        onOpenTour={() => setIsTourOpen(true)}
         onLogout={() => setIsAuthenticated(false)}
         conflictsCount={conflicts.length}
       />
@@ -436,6 +442,27 @@ export function App() {
         metrics={metrics}
         trains={trains}
         currentUser={currentUser}
+      />
+
+      {/* SIH25022 Interactive Presentation Pitch Deck */}
+      <PitchDeckModal
+        isOpen={isPitchDeckOpen}
+        onClose={() => setIsPitchDeckOpen(false)}
+        onLaunchLiveDemo={() => {
+          setIsPitchDeckOpen(false);
+          setIsTourOpen(true);
+        }}
+      />
+
+      {/* 6-Step Interactive Guided Showcase Tour for Evaluators */}
+      <GuidedTourModal
+        isOpen={isTourOpen}
+        onClose={() => setIsTourOpen(false)}
+        onSelectScenario={handleSelectScenario}
+        onOpenCabView={(id) => setCabViewTrainId(id)}
+        onDeployPlan={handleDeployPlan}
+        onOpenReport={() => setIsReportOpen(true)}
+        setActiveTab={setActiveTab}
       />
 
       {/* Footer */}

@@ -44,6 +44,30 @@ export const Header = ({
 
         {/* Right Status Block (Live Time + Report Download + Operator Profile) */}
         <div className="top-status-right">
+          {/* Guided Demo & Pitch Deck Buttons */}
+          <button
+            onClick={() => {
+              soundEngine.playRelayClick();
+              if (onOpenTour) onOpenTour();
+            }}
+            className="btn-guided-demo-header"
+            title="Launch 6-Step Interactive Showcase for Judges"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-spin-slow" />
+            <span>▶ Guided Demo</span>
+          </button>
+
+          <button
+            onClick={() => {
+              soundEngine.playRelayClick();
+              if (onOpenPitchDeck) onOpenPitchDeck();
+            }}
+            className="btn-pitch-deck-header"
+            title="Open SIH25022 Interactive Presentation Pitch Deck"
+          >
+            <span>📊 Pitch Deck</span>
+          </button>
+
           {/* Executive PDF Report Button */}
           <button
             onClick={() => {
