@@ -3339,6 +3339,218 @@ body {
 .metric-box .val { font-size: 10px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
 
 /* ========================================================================= */
+/* TRAIN HOLOGRAM TELEMETRY INSPECTOR MODAL */
+/* ========================================================================= */
+.inspector-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 92;
+  padding: 20px;
+}
+
+.inspector-modal-container {
+  background: #090e1c;
+  border: 1px solid var(--border-bright);
+  border-radius: 20px;
+  max-width: 760px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.95), 0 0 40px rgba(56, 189, 248, 0.25);
+  animation: fadeInZoom 0.2s ease-out;
+}
+
+.inspector-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 2px solid;
+  background: #070b16;
+  border-radius: 20px 20px 0 0;
+}
+
+.inspector-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inspector-title {
+  font-size: 16px;
+  font-weight: 900;
+  font-family: 'JetBrains Mono', monospace;
+  color: #ffffff;
+}
+
+.inspector-type-pill {
+  font-size: 9px;
+  font-family: 'JetBrains Mono', monospace;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid;
+  font-weight: 800;
+}
+
+.inspector-sub {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.btn-inspector-close {
+  background: #18233d;
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  border-radius: 6px;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.inspector-hologram-stage {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.hologram-engine-box {
+  position: relative;
+  width: 100px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.engine-headlamp-glow {
+  position: absolute;
+  top: 10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  opacity: 0.8;
+}
+
+.hologram-stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+@media (max-width: 650px) { .hologram-stats-row { grid-template-columns: repeat(2, 1fr); } }
+
+.holo-stat-pill {
+  background: #0b1124;
+  border: 1px solid var(--border-color);
+  padding: 8px 12px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+}
+.holo-stat-pill .lbl { font-size: 8.5px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+.holo-stat-pill .val { font-size: 12px; font-weight: 800; margin-top: 2px; }
+
+.inspector-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border-color);
+}
+@media (max-width: 650px) { .inspector-grid { grid-template-columns: 1fr; } }
+
+.inspector-card {
+  background: #080d1a;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card-top-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  font-family: 'JetBrains Mono', monospace;
+  color: #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 6px;
+}
+
+.telemetry-rows-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.t-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.t-row .lbl { color: var(--text-muted); }
+.t-row .val { font-weight: 700; color: #ffffff; }
+
+.inspector-actions-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 14px 24px;
+  background: #070a14;
+}
+@media (max-width: 650px) { .inspector-actions-bar { grid-template-columns: repeat(2, 1fr); } }
+
+.btn-insp-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 10.5px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 800;
+  cursor: pointer;
+  border: 1px solid;
+  transition: all 0.15s;
+}
+.btn-insp-action.sound { background: #142144; border-color: var(--accent-blue); color: var(--accent-blue); }
+.btn-insp-action.cab { background: #3b0764; border-color: var(--accent-purple); color: #d8b4fe; }
+.btn-insp-action.boost { background: #052e16; border-color: var(--accent-green); color: #86efac; }
+.btn-insp-action.e-stop { background: #450a0a; border-color: var(--accent-red); color: #fca5a5; }
+
+.btn-insp-action:hover { filter: brightness(1.2); transform: translateY(-1px); }
+
+.inspector-modal-footer {
+  padding: 10px 24px;
+  border-top: 1px solid var(--border-color);
+  background: #070b16;
+  font-size: 9px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-muted);
+  text-align: center;
+  border-radius: 0 0 20px 20px;
+}
+
+/* ========================================================================= */
 /* AI VOICE CONTROLLER MODAL */
 /* ========================================================================= */
 .voice-modal-backdrop {

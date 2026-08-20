@@ -33,6 +33,7 @@ import GuidedTourModal from './components/GuidedTourModal';
 import LandingPage from './components/LandingPage';
 import StationPlatformModal from './components/StationPlatformModal';
 import VoiceControlModal from './components/VoiceControlModal';
+import TrainInspectorModal from './components/TrainInspectorModal';
 
 import './App.css';
 
@@ -286,6 +287,7 @@ export function App() {
   };
 
   const cabViewTrainObj = trains.find((t) => t.id === cabViewTrainId) || null;
+  const selectedTrainObj = trains.find((t) => t.id === selectedTrainId) || null;
 
   if (viewMode === 'LANDING') {
     return (
@@ -458,6 +460,20 @@ export function App() {
           timeHours={timeHours}
           weather={weather}
           onClose={() => setCabViewTrainId(null)}
+          onUpdateSpeed={handleUpdateTrainSpeed}
+        />
+      )}
+
+      {/* Train Hologram Telemetry Inspector Modal */}
+      {selectedTrainId && (
+        <TrainInspectorModal
+          train={selectedTrainObj}
+          isOpen={!!selectedTrainId}
+          onClose={() => setSelectedTrainId(null)}
+          onOpenCabView={(id) => {
+            setSelectedTrainId(null);
+            setCabViewTrainId(id);
+          }}
           onUpdateSpeed={handleUpdateTrainSpeed}
         />
       )}
