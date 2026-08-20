@@ -1,5 +1,5 @@
 import React from 'react';
-import { Play, Pause, Volume2, VolumeX, Sparkles, Shield, Cpu, RotateCcw, Bell, User, LogOut, CheckCircle2, FileText } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, Sparkles, Shield, Cpu, RotateCcw, Bell, User, LogOut, CheckCircle2, FileText, Globe } from 'lucide-react';
 import { soundEngine } from '../engine/soundEngine';
 
 export const Header = ({
@@ -16,6 +16,10 @@ export const Header = ({
   currentUser,
   onOpenLogin,
   onOpenReport,
+  onOpenPitchDeck,
+  onOpenTour,
+  onOpenLanding,
+  onLogout,
   conflictsCount = 0,
 }) => {
   return (
