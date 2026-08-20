@@ -30,6 +30,7 @@ import ExportReportModal from './components/ExportReportModal';
 import LoginPage from './components/LoginPage';
 import PitchDeckModal from './components/PitchDeckModal';
 import GuidedTourModal from './components/GuidedTourModal';
+import LandingPage from './components/LandingPage';
 
 import './App.css';
 
@@ -57,7 +58,8 @@ export function App() {
   const [isPitchDeckOpen, setIsPitchDeckOpen] = useState(false);
   const [isTourOpen, setIsTourOpen] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Shows official Login Portal upon entry
+  const [viewMode, setViewMode] = useState('COMMAND_CENTER'); // 'COMMAND_CENTER', 'LANDING', 'LOGIN'
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   // Authenticated Operator State
   const [currentUser, setCurrentUser] = useState({
@@ -281,12 +283,35 @@ export function App() {
 
   const cabViewTrainObj = trains.find((t) => t.id === cabViewTrainId) || null;
 
-  if (!isAuthenticated) {
+  if (viewMode === 'LANDING') {
+    return (
+      <>
+        <LandingPage
+          onLaunchCommandCenter={() => setViewMode('COMMAND_CENTER')}
+          onOpenPitchDeck={() => setIsPitchDeckOpen(true)}
+          onOpenLogin={() => setViewMode('LOGIN')}
+        />
+        {/* SIH25022 Interactive Presentation Pitch Deck */}
+        <PitchDeckModal
+          isOpen={isPitchDeckOpen}
+          onClose={() => setIsPitchDeckOpen(false)}
+          onLaunchLiveDemo={() => {
+            setIsPitchDeckOpen(false);
+            setViewMode('COMMAND_CENTER');
+            setIsTourOpen(true);
+          }}
+        />
+      </>
+    );
+  }
+
+  if (viewMode === 'LOGIN' || !isAuthenticated) {
     return (
       <LoginPage
         onLoginSuccess={(user) => {
           setCurrentUser(user);
           setIsAuthenticated(true);
+          setViewMode('COMMAND_CENTER');
         }}
       />
     );
@@ -307,11 +332,15 @@ export function App() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         currentUser={currentUser}
-        onOpenLogin={() => setIsAuthOpen(true)}
+        onOpenLogin={() => setViewMode('LOGIN')}
         onOpenReport={() => setIsReportOpen(true)}
         onOpenPitchDeck={() => setIsPitchDeckOpen(true)}
         onOpenTour={() => setIsTourOpen(true)}
-        onLogout={() => setIsAuthenticated(false)}
+        onOpenLanding={() => setViewMode('LANDING')}
+        onLogout={() => {
+          setIsAuthenticated(false);
+          setViewMode('LOGIN');
+        }}
         conflictsCount={conflicts.length}
       />
 

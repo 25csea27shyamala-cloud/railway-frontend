@@ -44,6 +44,19 @@ export const Header = ({
 
         {/* Right Status Block (Live Time + Report Download + Operator Profile) */}
         <div className="top-status-right">
+          {/* Product Landing Page Switcher */}
+          <button
+            onClick={() => {
+              soundEngine.playRelayClick();
+              if (onOpenLanding) onOpenLanding();
+            }}
+            className="btn-product-landing-header"
+            title="Switch to Public Enterprise SaaS Product Landing Page"
+          >
+            <Globe className="w-3.5 h-3.5 text-sky-400" />
+            <span>🚀 Product Landing</span>
+          </button>
+
           {/* Guided Demo & Pitch Deck Buttons */}
           <button
             onClick={() => {
