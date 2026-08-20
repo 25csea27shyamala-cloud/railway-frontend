@@ -32,6 +32,7 @@ import PitchDeckModal from './components/PitchDeckModal';
 import GuidedTourModal from './components/GuidedTourModal';
 import LandingPage from './components/LandingPage';
 import StationPlatformModal from './components/StationPlatformModal';
+import VoiceControlModal from './components/VoiceControlModal';
 
 import './App.css';
 
@@ -59,6 +60,7 @@ export function App() {
   const [isReportOpen, setIsReportOpen] = useState(false);
   const [isPitchDeckOpen, setIsPitchDeckOpen] = useState(false);
   const [isTourOpen, setIsTourOpen] = useState(false);
+  const [isVoiceOpen, setIsVoiceOpen] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [viewMode, setViewMode] = useState('COMMAND_CENTER'); // 'COMMAND_CENTER', 'LANDING', 'LOGIN'
   const [isAuthenticated, setIsAuthenticated] = useState(true);
@@ -339,6 +341,7 @@ export function App() {
         onOpenPitchDeck={() => setIsPitchDeckOpen(true)}
         onOpenTour={() => setIsTourOpen(true)}
         onOpenLanding={() => setViewMode('LANDING')}
+        onOpenVoice={() => setIsVoiceOpen(true)}
         onLogout={() => {
           setIsAuthenticated(false);
           setViewMode('LOGIN');
@@ -504,6 +507,17 @@ export function App() {
         onDeployPlan={handleDeployPlan}
         onOpenReport={() => setIsReportOpen(true)}
         setActiveTab={setActiveTab}
+      />
+
+      {/* AI Voice Traffic Dispatcher Modal */}
+      <VoiceControlModal
+        isOpen={isVoiceOpen}
+        onClose={() => setIsVoiceOpen(false)}
+        onDeployPlan={handleDeployPlan}
+        onSelectScenario={handleSelectScenario}
+        onSetWeather={setWeather}
+        onSelectTrain={setSelectedTrainId}
+        trains={trains}
       />
 
       {/* Footer */}

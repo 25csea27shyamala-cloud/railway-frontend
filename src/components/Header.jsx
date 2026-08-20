@@ -19,6 +19,7 @@ export const Header = ({
   onOpenPitchDeck,
   onOpenTour,
   onOpenLanding,
+  onOpenVoice,
   onLogout,
   conflictsCount = 0,
 }) => {
@@ -48,6 +49,19 @@ export const Header = ({
 
         {/* Right Status Block (Live Time + Report Download + Operator Profile) */}
         <div className="top-status-right">
+          {/* AI Voice Dispatcher Trigger */}
+          <button
+            onClick={() => {
+              soundEngine.playRelayClick();
+              if (onOpenVoice) onOpenVoice();
+            }}
+            className="btn-voice-header"
+            title="Open AI Natural Language Voice Controller"
+          >
+            <span className="pulse-mic-dot" />
+            <span>🎙️ AI Voice</span>
+          </button>
+
           {/* Product Landing Page Switcher */}
           <button
             onClick={() => {
