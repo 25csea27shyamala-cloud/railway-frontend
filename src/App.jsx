@@ -27,6 +27,7 @@ import TimeDistanceModal from './components/TimeDistanceModal';
 import CabViewModal from './components/CabViewModal';
 import AuthLoginModal from './components/AuthLoginModal';
 import ExportReportModal from './components/ExportReportModal';
+import LoginPage from './components/LoginPage';
 
 import './App.css';
 
@@ -52,13 +53,14 @@ export function App() {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isReportOpen, setIsReportOpen] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true); // default true or toggleable
 
   // Authenticated Operator State
   const [currentUser, setCurrentUser] = useState({
     id: 'OP_7841',
-    name: 'R. K. Sharma',
+    name: 'Shri R. K. Sharma',
     role: 'CHIEF_CONTROLLER',
-    roleLabel: 'Chief Train Controller',
+    roleLabel: 'Chief Section Controller',
     zone: 'North Central Railway (NCR)',
     division: 'Prayagraj Control Room (PRYJ)',
     email: 'controller.pryj@railnet.gov.in',
@@ -275,6 +277,17 @@ export function App() {
 
   const cabViewTrainObj = trains.find((t) => t.id === cabViewTrainId) || null;
 
+  if (!isAuthenticated) {
+    return (
+      <LoginPage
+        onLoginSuccess={(user) => {
+          setCurrentUser(user);
+          setIsAuthenticated(true);
+        }}
+      />
+    );
+  }
+
   return (
     <div className="command-center-app-root">
       {/* 1. Official Command Center Top Navbar */}
@@ -292,6 +305,7 @@ export function App() {
         currentUser={currentUser}
         onOpenLogin={() => setIsAuthOpen(true)}
         onOpenReport={() => setIsReportOpen(true)}
+        onLogout={() => setIsAuthenticated(false)}
         conflictsCount={conflicts.length}
       />
 

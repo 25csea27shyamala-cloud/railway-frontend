@@ -78,15 +78,26 @@ export const Header = ({
 
           {/* Operator Profile Badge */}
           {currentUser ? (
-            <div className="operator-profile-card" onClick={onOpenLogin}>
-              <div className="avatar-ring">
+            <div className="operator-profile-card">
+              <div className="avatar-ring" onClick={onOpenLogin}>
                 <User className="w-3.5 h-3.5 text-sky-200" />
               </div>
-              <div className="operator-details">
+              <div className="operator-details" onClick={onOpenLogin}>
                 <span className="op-title">Operator</span>
                 <span className="op-name">{currentUser.name || 'Control Room'}</span>
                 <span className="op-role">{currentUser.roleLabel || 'Chief Controller'}</span>
               </div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  soundEngine.playRelayClick();
+                  if (onLogout) onLogout();
+                }}
+                className="btn-header-logout"
+                title="Logout / Switch Operator Desk"
+              >
+                <LogOut className="w-3.5 h-3.5 text-rose-400" />
+              </button>
             </div>
           ) : (
             <button onClick={onOpenLogin} className="btn-login-header">
